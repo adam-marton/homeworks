@@ -1,53 +1,54 @@
 package xyz.codingmentor.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import xyz.codingmentor.entity.DeviceEntity;
+import xyz.codingmentor.exception.DeviceIsAlreadyInTheCollectionException;
+import xyz.codingmentor.exception.DeviceIsNotInTheCollectionException;
 
 /**
  *
  * @author Ádám
  */
 public class DeviceDB {
-    private final List<DeviceEntity> deviceEntities = new ArrayList<>();
+    private final Map<String, DeviceEntity> deviceEntities = new HashMap<>();
     
     public DeviceEntity addDevice(DeviceEntity device) {
-        String id = UUID.randomUUID().toString();
-        device.setId(id);
-        device.setCount(0);
-        deviceEntities.add(device);
-        return deviceEntities.get(deviceEntities.size()-1);
+        if(!deviceEntities.containsKey(device.getId())) {
+            device.setId(UUID.randomUUID().toString());
+            device.setCount(0);
+            deviceEntities.put(device.getId(), device);
+            return deviceEntities.get(device.getId());
+        }
+        throw new DeviceIsAlreadyInTheCollectionException();
     }
     
     public DeviceEntity editDevice(DeviceEntity device) {
-        int index = -1;
-        for(DeviceEntity d : deviceEntities) {
-            if(device.getId().equals(d.getId())) {
-                index = deviceEntities.indexOf(d);
-            }
+        if(deviceEntities.containsKey(device.getId())) {
+            deviceEntities.replace(device.getId(), device);
+            return deviceEntities.get(device.getId());
         }
-        deviceEntities.set(index, device);
-        return deviceEntities.get(index);
+        throw new DeviceIsNotInTheCollectionException();
     }
     
     public DeviceEntity getDevice(String id) {
-        for(DeviceEntity d : deviceEntities) {
-            if(id.equals(d.getId())) {
-                return d;
-            }
+        if(deviceEntities.containsKey(id)) {
+            return deviceEntities.get(id);
         }
-        return null;
+        throw new DeviceIsNotInTheCollectionException();
     }
     
     public DeviceEntity deleteDevice(DeviceEntity device) {
-        int index = deviceEntities.indexOf(device);
-        DeviceEntity returnDevice = deviceEntities.get(index);
-        deviceEntities.remove(index);
-        return returnDevice;
+        if(deviceEntities.containsKey(device.getId())) {
+            return deviceEntities.remove(device.getId());
+        }
+        throw new DeviceIsNotInTheCollectionException();
     }
     
     public List<DeviceEntity> getAllDevice() {
-        return deviceEntities;
+        return new ArrayList<>(deviceEntities.values());
     }
 }

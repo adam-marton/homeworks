@@ -16,14 +16,14 @@ import xyz.codingmentor.entity.UserEntity;
  * @author Ádám
  */
 public class UserDBTest {
-    UserDB userDB;
-    UserEntity firstUserEntity;
-    UserEntity secondUserEntity;
-    Calendar dateOfBirthCalendar;
-    Calendar registrationDateCalendar;
-    Date dateOfBirth;
-    Date registrationDate;
-    Date lastModifiedDate;
+    private UserDB userDB;
+    private UserEntity firstUserEntity;
+    private UserEntity secondUserEntity;
+    private Calendar dateOfBirthCalendar;
+    private Calendar registrationDateCalendar;
+    private Date dateOfBirth;
+    private Date registrationDate;
+    private Date lastModifiedDate;
     
     @Before
     public void setUp() {

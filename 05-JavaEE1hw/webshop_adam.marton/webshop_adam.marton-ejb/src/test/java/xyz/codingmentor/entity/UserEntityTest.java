@@ -21,12 +21,12 @@ import org.junit.Test;
 public class UserEntityTest {
     private static ValidatorFactory vf;
     private static Validator validator;
-    Calendar dateOfBirthCalendar;
-    Calendar registrationDateCalendar;
-    Date dateOfBirth;
-    Date registrationDate;
-    Date lastModifiedDate;
-    UserEntity userEntity;
+    private Calendar dateOfBirthCalendar;
+    private Calendar registrationDateCalendar;
+    private Date dateOfBirth;
+    private Date registrationDate;
+    private Date lastModifiedDate;
+    private UserEntity userEntity;
     
     @BeforeClass
     public static void setUpClass() {

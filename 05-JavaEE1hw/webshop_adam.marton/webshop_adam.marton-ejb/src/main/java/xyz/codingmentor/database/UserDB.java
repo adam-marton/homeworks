@@ -2,62 +2,59 @@ package xyz.codingmentor.database;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import xyz.codingmentor.entity.UserEntity;
+import xyz.codingmentor.exception.UserIsAlreadyInTheCollectionException;
+import xyz.codingmentor.exception.UserIsNotInTheCollectionException;
 
 /**
  *
  * @author Ádám
  */
 public class UserDB {
-    private final List<UserEntity> userEntities = new ArrayList<>();
+    private final Map<String, UserEntity> userEntities = new HashMap<>();
     
     public UserEntity addUser(UserEntity user) {
-        Date currentDate = new Date();
-        user.setRegistrationDate(currentDate);
-        user.setLastModifiedDate(currentDate);
-        userEntities.add(user);
-        return userEntities.get(userEntities.size()-1);
+        if(!userEntities.containsKey(user.getUsername())) {
+            Date currentDate = new Date();
+            user.setRegistrationDate(currentDate);
+            user.setLastModifiedDate(currentDate);
+            userEntities.put(user.getUsername(), user);
+            return userEntities.get(user.getUsername());
+        }
+        throw new UserIsAlreadyInTheCollectionException();
     }
     
     public UserEntity getUser(String username) {
-        for(UserEntity u : userEntities) {
-            if(username.equals(u.getUsername())) {
-                return u;
-            }
+        if(userEntities.containsKey(username)) {
+            return userEntities.get(username);
         }
-        return null;
+        throw new UserIsNotInTheCollectionException();
     }
     
     public boolean authenticate(String username, String password) {
-        for(UserEntity u : userEntities) {
-            if(username.equals(u.getUsername()) && password.equals(u.getPassword())) {
-                return true;
-            }
-        }
-        return false;
+        return userEntities.containsKey(username) && password.equals(userEntities.get(username).getPassword());
     }
     
     public UserEntity modifyUser(UserEntity user) {
-        int index = -1;
-        for(UserEntity u : userEntities) {
-            if(user.getUsername().equals(u.getUsername())) {
-                index = userEntities.indexOf(u);
-            }
+        if(userEntities.containsKey(user.getUsername())) {
+            user.setLastModifiedDate(new Date());
+            userEntities.replace(user.getUsername(), user);
+            return userEntities.get(user.getUsername());
         }
-        user.setLastModifiedDate(new Date());
-        userEntities.set(index, user);
-        return userEntities.get(index);
+        throw new UserIsNotInTheCollectionException();
     }
     
     public UserEntity deleteUser(UserEntity user) {
-        int index = userEntities.indexOf(user);
-        UserEntity returnUser = userEntities.get(index);
-        userEntities.remove(index);
-        return returnUser;
+        if(userEntities.containsKey(user.getUsername())) {
+            return userEntities.remove(user.getUsername());
+        }
+        throw new UserIsNotInTheCollectionException();
     }
     
     public List<UserEntity> getAllUser() {
-        return userEntities;
+        return new ArrayList<>(userEntities.values());
     }
 }

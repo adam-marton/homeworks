@@ -14,9 +14,9 @@ import xyz.codingmentor.entity.Manufacturer;
  * @author Ádám
  */
 public class DeviceDBTest {
-    DeviceDB deviceDB;
-    DeviceEntity firstDeviceEntity;
-    DeviceEntity secondDeviceEntity;
+    private DeviceDB deviceDB;
+    private DeviceEntity firstDeviceEntity;
+    private DeviceEntity secondDeviceEntity;
     
     @Before
     public void setUp() {

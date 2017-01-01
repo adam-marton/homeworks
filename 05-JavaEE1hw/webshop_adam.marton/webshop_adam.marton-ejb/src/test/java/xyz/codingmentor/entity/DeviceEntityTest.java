@@ -19,8 +19,8 @@ import org.junit.Test;
 public class DeviceEntityTest {
     private static ValidatorFactory vf;
     private static Validator validator;
-    String id;
-    DeviceEntity deviceEntity;
+    private String id;
+    private DeviceEntity deviceEntity;
     
     @BeforeClass
     public static void setUpClass() {
