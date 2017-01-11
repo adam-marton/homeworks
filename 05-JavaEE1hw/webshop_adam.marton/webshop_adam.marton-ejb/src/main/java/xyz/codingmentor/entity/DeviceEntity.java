@@ -6,11 +6,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import xyz.codingmentor.constraint.ColorOfAppleDevice;
 import xyz.codingmentor.constraint.ColorOfSamsungDevice;
+import xyz.codingmentor.annotation.Validate;
 
 /**
  *
  * @author Ádám
  */
+@Validate
 @ColorOfAppleDevice
 @ColorOfSamsungDevice
 public class DeviceEntity {

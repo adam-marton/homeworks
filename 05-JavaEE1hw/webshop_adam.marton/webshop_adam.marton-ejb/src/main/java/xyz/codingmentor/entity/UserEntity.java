@@ -8,11 +8,13 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import xyz.codingmentor.constraint.BirthDateBeforeRegistrationDate;
 import xyz.codingmentor.constraint.BothFirstAndLastNameOrNoneOfThem;
+import xyz.codingmentor.annotation.Validate;
 
 /**
  *
  * @author Ádám
  */
+@Validate
 @BothFirstAndLastNameOrNoneOfThem
 @BirthDateBeforeRegistrationDate
 public class UserEntity {

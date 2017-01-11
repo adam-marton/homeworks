@@ -16,7 +16,6 @@ import xyz.codingmentor.entity.UserEntity;
  * @author Ádám
  */
 public class UserDBTest {
-    private UserDB userDB;
     private UserEntity firstUserEntity;
     private UserEntity secondUserEntity;
     private Calendar dateOfBirthCalendar;
@@ -27,7 +26,7 @@ public class UserDBTest {
     
     @Before
     public void setUp() {
-        userDB = new UserDB();
+        UserDB.getInstance().clearUserDB();
         dateOfBirthCalendar = new GregorianCalendar(2000, 1, 2, 3, 4);
         dateOfBirth = dateOfBirthCalendar.getTime();
         registrationDateCalendar = new GregorianCalendar();
@@ -62,50 +61,50 @@ public class UserDBTest {
 
     @Test
     public void testAddUser() {
-        userDB.addUser(firstUserEntity);
-        Assert.assertEquals(firstUserEntity, userDB.getUser("firstTester"));
+        UserDB.getInstance().addUser(firstUserEntity);
+        Assert.assertEquals(firstUserEntity, UserDB.getInstance().getUser("firstTester"));
     }
 
     @Test
     public void testGetUser() {
-        userDB.addUser(secondUserEntity);
-        UserEntity returnedUserEntity = userDB.getUser(secondUserEntity.getUsername());
+        UserDB.getInstance().addUser(secondUserEntity);
+        UserEntity returnedUserEntity = UserDB.getInstance().getUser(secondUserEntity.getUsername());
         Assert.assertEquals(returnedUserEntity, secondUserEntity);
     }
 
     @Test
     public void testAuthenticate() {
-        userDB.addUser(firstUserEntity);
-        userDB.addUser(secondUserEntity);
-        Assert.assertEquals(true, userDB.authenticate("firstTester", "Abc123"));
+        UserDB.getInstance().addUser(firstUserEntity);
+        UserDB.getInstance().addUser(secondUserEntity);
+        Assert.assertEquals(true, UserDB.getInstance().authenticate("firstTester", "Abc123"));
     }
 
     @Test
     public void testModifyUser() {
-        userDB.addUser(firstUserEntity);
-        userDB.addUser(secondUserEntity);
+        UserDB.getInstance().addUser(firstUserEntity);
+        UserDB.getInstance().addUser(secondUserEntity);
         secondUserEntity.setEmail("new@email.net");
         secondUserEntity.setPhone("06209876543");
-        UserEntity modifiedUserEntity = userDB.modifyUser(secondUserEntity);
+        UserEntity modifiedUserEntity = UserDB.getInstance().modifyUser(secondUserEntity);
         Assert.assertEquals(modifiedUserEntity, secondUserEntity);
     }
 
     @Test
     public void testDeleteUser() {
-        userDB.addUser(firstUserEntity);
-        userDB.addUser(secondUserEntity);
-        UserEntity deletedUserEntity = userDB.deleteUser(firstUserEntity);
+        UserDB.getInstance().addUser(firstUserEntity);
+        UserDB.getInstance().addUser(secondUserEntity);
+        UserEntity deletedUserEntity = UserDB.getInstance().deleteUser(firstUserEntity);
         Assert.assertEquals(deletedUserEntity, firstUserEntity);
     }
 
     @Test
     public void testGetAllUser() {
-        userDB.addUser(firstUserEntity);
-        userDB.addUser(secondUserEntity);
+        UserDB.getInstance().addUser(firstUserEntity);
+        UserDB.getInstance().addUser(secondUserEntity);
         List<UserEntity> userEntities = new ArrayList<>();
         userEntities.add(firstUserEntity);
         userEntities.add(secondUserEntity);
-        List<UserEntity> returnedUserEntities = userDB.getAllUser();
+        List<UserEntity> returnedUserEntities = UserDB.getInstance().getAllUser();
         Assert.assertEquals(returnedUserEntities, userEntities);
     }
     

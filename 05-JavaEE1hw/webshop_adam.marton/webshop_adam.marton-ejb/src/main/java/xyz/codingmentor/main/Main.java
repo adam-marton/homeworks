@@ -7,9 +7,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
 import xyz.codingmentor.database.DeviceDB;
+import xyz.codingmentor.database.DeviceDBService;
 import xyz.codingmentor.database.UserDB;
+import xyz.codingmentor.entity.Color;
 import xyz.codingmentor.entity.DeviceEntity;
+import xyz.codingmentor.entity.Manufacturer;
 import xyz.codingmentor.entity.UserEntity;
 
 /**
@@ -25,8 +30,6 @@ public class Main {
     
     public static void main(String[] args) {
         try {
-            UserDB userDB = new UserDB();
-            DeviceDB deviceDB = new DeviceDB();
             ObjectMapper mapper = new ObjectMapper(); 
             List<UserEntity> userEntities = mapper.readValue(new File("userEntities.json"),
                     TypeFactory.defaultInstance().constructCollectionType(List.class, UserEntity.class));
@@ -34,15 +37,32 @@ public class Main {
                     TypeFactory.defaultInstance().constructCollectionType(List.class, DeviceEntity.class));
            
             for(UserEntity u : userEntities) {
-                userDB.addUser(u);
+                UserDB.getInstance().addUser(u);
             }
             for(DeviceEntity d : deviceEntities) {
-                deviceDB.addDevice(d);
+                DeviceDB.getInstance().addDevice(d);
             }
-            LOGGER.log(Level.INFO, userDB.getAllUser().toString());
-            LOGGER.log(Level.INFO, deviceDB.getAllDevice().toString());
+            LOGGER.log(Level.INFO, UserDB.getInstance().getAllUser().toString());
+            LOGGER.log(Level.INFO, DeviceDB.getInstance().getAllDevice().toString());
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Weld weld = new Weld();
+        WeldContainer container = weld.initialize();
+        
+        DeviceDBService deviceDBService = container.instance().select(DeviceDBService.class).get();
+        DeviceEntity device = new DeviceEntity.Builder()
+                .manufacturer(Manufacturer.HTC)
+                .type("GoodOne")
+                .price(1000)
+                .color(Color.BLUE)
+                .count(2)
+                .build();
+        deviceDBService.addDevice(device);
+        LOGGER.log(Level.INFO, deviceDBService.getDevice(device.getId()).toString());
+        deviceDBService.deleteDevice(device);
+        
+        weld.shutdown();
     }
 }

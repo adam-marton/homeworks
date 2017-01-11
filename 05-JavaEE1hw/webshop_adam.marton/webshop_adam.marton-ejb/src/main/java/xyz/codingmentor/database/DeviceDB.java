@@ -1,7 +1,7 @@
 package xyz.codingmentor.database;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -14,7 +14,19 @@ import xyz.codingmentor.exception.DeviceIsNotInTheCollectionException;
  * @author Ádám
  */
 public class DeviceDB {
-    private final Map<String, DeviceEntity> deviceEntities = new HashMap<>();
+    private static DeviceDB instance;
+    private final Map<String, DeviceEntity> deviceEntities;
+    
+    private DeviceDB() {
+        deviceEntities = new LinkedHashMap<>();
+    }
+    
+    public static DeviceDB getInstance() {
+        if(null == instance) {
+            instance = new DeviceDB();
+        }
+        return instance;
+    }
     
     public DeviceEntity addDevice(DeviceEntity device) {
         if(!deviceEntities.containsKey(device.getId())) {
@@ -50,5 +62,9 @@ public class DeviceDB {
     
     public List<DeviceEntity> getAllDevice() {
         return new ArrayList<>(deviceEntities.values());
+    }
+    
+    public void clearDeviceDB() {
+        deviceEntities.clear();
     }
 }

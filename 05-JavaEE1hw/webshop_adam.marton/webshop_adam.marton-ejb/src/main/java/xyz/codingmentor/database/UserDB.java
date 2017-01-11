@@ -2,7 +2,7 @@ package xyz.codingmentor.database;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import xyz.codingmentor.entity.UserEntity;
@@ -14,7 +14,19 @@ import xyz.codingmentor.exception.UserIsNotInTheCollectionException;
  * @author Ádám
  */
 public class UserDB {
-    private final Map<String, UserEntity> userEntities = new HashMap<>();
+    private static UserDB instance;
+    private final Map<String, UserEntity> userEntities;
+    
+    private UserDB() {
+        userEntities = new LinkedHashMap<>();
+    }
+    
+    public static UserDB getInstance() {
+        if(null == instance) {
+            instance = new UserDB();
+        }
+        return instance;
+    }
     
     public UserEntity addUser(UserEntity user) {
         if(!userEntities.containsKey(user.getUsername())) {
@@ -56,5 +68,9 @@ public class UserDB {
     
     public List<UserEntity> getAllUser() {
         return new ArrayList<>(userEntities.values());
+    }
+    
+    public void clearUserDB() {
+        userEntities.clear();
     }
 }

@@ -14,13 +14,12 @@ import xyz.codingmentor.entity.Manufacturer;
  * @author Ádám
  */
 public class DeviceDBTest {
-    private DeviceDB deviceDB;
     private DeviceEntity firstDeviceEntity;
     private DeviceEntity secondDeviceEntity;
     
     @Before
     public void setUp() {
-        deviceDB = new DeviceDB();
+        DeviceDB.getInstance().clearDeviceDB();
         firstDeviceEntity = new DeviceEntity.Builder()
                 .manufacturer(Manufacturer.HTC)
                 .type("GoodOne")
@@ -39,44 +38,44 @@ public class DeviceDBTest {
 
     @Test
     public void testAddDevice() {
-        deviceDB.addDevice(firstDeviceEntity);
-        Assert.assertEquals(firstDeviceEntity, deviceDB.getDevice(firstDeviceEntity.getId()));
+        DeviceDB.getInstance().addDevice(firstDeviceEntity);
+        Assert.assertEquals(firstDeviceEntity, DeviceDB.getInstance().getDevice(firstDeviceEntity.getId()));
     }
 
     @Test
     public void testEditDevice() {
-        deviceDB.addDevice(firstDeviceEntity);
-        deviceDB.addDevice(secondDeviceEntity);
+        DeviceDB.getInstance().addDevice(firstDeviceEntity);
+        DeviceDB.getInstance().addDevice(secondDeviceEntity);
         secondDeviceEntity.setType("A77");
         secondDeviceEntity.setPrice(7000);
         secondDeviceEntity.setCount(3);
-        DeviceEntity modifiedDeviceEntity = deviceDB.editDevice(secondDeviceEntity);
+        DeviceEntity modifiedDeviceEntity = DeviceDB.getInstance().editDevice(secondDeviceEntity);
         Assert.assertEquals(modifiedDeviceEntity, secondDeviceEntity);
     }
 
     @Test
     public void testGetDevice() {
-        deviceDB.addDevice(secondDeviceEntity);
-        DeviceEntity returnedDeviceEntity = deviceDB.getDevice(secondDeviceEntity.getId());
+        DeviceDB.getInstance().addDevice(secondDeviceEntity);
+        DeviceEntity returnedDeviceEntity = DeviceDB.getInstance().getDevice(secondDeviceEntity.getId());
         Assert.assertEquals(secondDeviceEntity, returnedDeviceEntity);
     }
 
     @Test
     public void testDeleteDevice() {
-        deviceDB.addDevice(firstDeviceEntity);
-        deviceDB.addDevice(secondDeviceEntity);
-        DeviceEntity deletedDeviceEntity = deviceDB.deleteDevice(firstDeviceEntity);
+        DeviceDB.getInstance().addDevice(firstDeviceEntity);
+        DeviceDB.getInstance().addDevice(secondDeviceEntity);
+        DeviceEntity deletedDeviceEntity = DeviceDB.getInstance().deleteDevice(firstDeviceEntity);
         Assert.assertEquals(deletedDeviceEntity, firstDeviceEntity);
     }
 
     @Test
     public void testGetAllDevice() {
-        deviceDB.addDevice(firstDeviceEntity);
-        deviceDB.addDevice(secondDeviceEntity);
         List<DeviceEntity> deviceEntities = new ArrayList<>();
         deviceEntities.add(firstDeviceEntity);
         deviceEntities.add(secondDeviceEntity);
-        List<DeviceEntity> returnedDeviceEntities = deviceDB.getAllDevice();
+        DeviceDB.getInstance().addDevice(firstDeviceEntity);
+        DeviceDB.getInstance().addDevice(secondDeviceEntity);
+        List<DeviceEntity> returnedDeviceEntities = DeviceDB.getInstance().getAllDevice();
         Assert.assertEquals(returnedDeviceEntities, deviceEntities);
     }
 }
