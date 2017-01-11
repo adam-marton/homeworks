@@ -20,6 +20,7 @@ import xyz.codingmentor.exception.ValidationException;
  * @author Ádám
  */
 @Interceptor
+@BeanValidation
 public class ValidatorInterceptor {
 
     @Inject
