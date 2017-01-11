@@ -19,7 +19,6 @@ public class DeviceDBTest {
     
     @Before
     public void setUp() {
-        DeviceDB.getInstance().clearDeviceDB();
         firstDeviceEntity = new DeviceEntity.Builder()
                 .manufacturer(Manufacturer.HTC)
                 .type("GoodOne")
@@ -40,6 +39,7 @@ public class DeviceDBTest {
     public void testAddDevice() {
         DeviceDB.getInstance().addDevice(firstDeviceEntity);
         Assert.assertEquals(firstDeviceEntity, DeviceDB.getInstance().getDevice(firstDeviceEntity.getId()));
+        DeviceDB.getInstance().deleteDevice(firstDeviceEntity);
     }
 
     @Test
@@ -51,6 +51,8 @@ public class DeviceDBTest {
         secondDeviceEntity.setCount(3);
         DeviceEntity modifiedDeviceEntity = DeviceDB.getInstance().editDevice(secondDeviceEntity);
         Assert.assertEquals(modifiedDeviceEntity, secondDeviceEntity);
+        DeviceDB.getInstance().deleteDevice(firstDeviceEntity);
+        DeviceDB.getInstance().deleteDevice(secondDeviceEntity);
     }
 
     @Test
@@ -58,6 +60,7 @@ public class DeviceDBTest {
         DeviceDB.getInstance().addDevice(secondDeviceEntity);
         DeviceEntity returnedDeviceEntity = DeviceDB.getInstance().getDevice(secondDeviceEntity.getId());
         Assert.assertEquals(secondDeviceEntity, returnedDeviceEntity);
+        DeviceDB.getInstance().deleteDevice(secondDeviceEntity);
     }
 
     @Test
@@ -66,6 +69,7 @@ public class DeviceDBTest {
         DeviceDB.getInstance().addDevice(secondDeviceEntity);
         DeviceEntity deletedDeviceEntity = DeviceDB.getInstance().deleteDevice(firstDeviceEntity);
         Assert.assertEquals(deletedDeviceEntity, firstDeviceEntity);
+        DeviceDB.getInstance().deleteDevice(secondDeviceEntity);
     }
 
     @Test
@@ -77,5 +81,7 @@ public class DeviceDBTest {
         DeviceDB.getInstance().addDevice(secondDeviceEntity);
         List<DeviceEntity> returnedDeviceEntities = DeviceDB.getInstance().getAllDevice();
         Assert.assertEquals(returnedDeviceEntities, deviceEntities);
+        DeviceDB.getInstance().deleteDevice(firstDeviceEntity);
+        DeviceDB.getInstance().deleteDevice(secondDeviceEntity);
     }
 }

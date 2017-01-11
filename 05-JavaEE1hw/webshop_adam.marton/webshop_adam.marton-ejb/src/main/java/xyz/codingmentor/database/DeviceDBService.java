@@ -2,14 +2,15 @@ package xyz.codingmentor.database;
 
 import java.util.List;
 import javax.interceptor.ExcludeClassInterceptors;
+import javax.interceptor.Interceptors;
 import xyz.codingmentor.entity.DeviceEntity;
-import xyz.codingmentor.interceptor.BeanValidation;
+import xyz.codingmentor.interceptor.ValidatorInterceptor;
 
 /**
  *
  * @author Ádám
  */
-@BeanValidation
+@Interceptors(ValidatorInterceptor.class)
 public class DeviceDBService {
     
     public DeviceDBService() {
@@ -35,9 +36,5 @@ public class DeviceDBService {
     
     public List<DeviceEntity> getAllDevice() {
         return DeviceDB.getInstance().getAllDevice();
-    }
-    
-    public void clearDeviceDB() {
-        DeviceDB.getInstance().clearDeviceDB();
     }
 }

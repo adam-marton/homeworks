@@ -69,8 +69,4 @@ public class UserDB {
     public List<UserEntity> getAllUser() {
         return new ArrayList<>(userEntities.values());
     }
-    
-    public void clearUserDB() {
-        userEntities.clear();
-    }
 }

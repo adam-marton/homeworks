@@ -63,8 +63,4 @@ public class DeviceDB {
     public List<DeviceEntity> getAllDevice() {
         return new ArrayList<>(deviceEntities.values());
     }
-    
-    public void clearDeviceDB() {
-        deviceEntities.clear();
-    }
 }

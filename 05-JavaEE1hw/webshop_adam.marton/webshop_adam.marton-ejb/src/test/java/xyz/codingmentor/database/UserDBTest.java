@@ -26,7 +26,6 @@ public class UserDBTest {
     
     @Before
     public void setUp() {
-        UserDB.getInstance().clearUserDB();
         dateOfBirthCalendar = new GregorianCalendar(2000, 1, 2, 3, 4);
         dateOfBirth = dateOfBirthCalendar.getTime();
         registrationDateCalendar = new GregorianCalendar();
@@ -63,6 +62,7 @@ public class UserDBTest {
     public void testAddUser() {
         UserDB.getInstance().addUser(firstUserEntity);
         Assert.assertEquals(firstUserEntity, UserDB.getInstance().getUser("firstTester"));
+        UserDB.getInstance().deleteUser(firstUserEntity);
     }
 
     @Test
@@ -70,6 +70,7 @@ public class UserDBTest {
         UserDB.getInstance().addUser(secondUserEntity);
         UserEntity returnedUserEntity = UserDB.getInstance().getUser(secondUserEntity.getUsername());
         Assert.assertEquals(returnedUserEntity, secondUserEntity);
+        UserDB.getInstance().deleteUser(secondUserEntity);
     }
 
     @Test
@@ -77,6 +78,8 @@ public class UserDBTest {
         UserDB.getInstance().addUser(firstUserEntity);
         UserDB.getInstance().addUser(secondUserEntity);
         Assert.assertEquals(true, UserDB.getInstance().authenticate("firstTester", "Abc123"));
+        UserDB.getInstance().deleteUser(firstUserEntity);
+        UserDB.getInstance().deleteUser(secondUserEntity);
     }
 
     @Test
@@ -87,6 +90,8 @@ public class UserDBTest {
         secondUserEntity.setPhone("06209876543");
         UserEntity modifiedUserEntity = UserDB.getInstance().modifyUser(secondUserEntity);
         Assert.assertEquals(modifiedUserEntity, secondUserEntity);
+        UserDB.getInstance().deleteUser(firstUserEntity);
+        UserDB.getInstance().deleteUser(secondUserEntity);
     }
 
     @Test
@@ -95,6 +100,7 @@ public class UserDBTest {
         UserDB.getInstance().addUser(secondUserEntity);
         UserEntity deletedUserEntity = UserDB.getInstance().deleteUser(firstUserEntity);
         Assert.assertEquals(deletedUserEntity, firstUserEntity);
+        UserDB.getInstance().deleteUser(secondUserEntity);
     }
 
     @Test
@@ -106,6 +112,8 @@ public class UserDBTest {
         userEntities.add(secondUserEntity);
         List<UserEntity> returnedUserEntities = UserDB.getInstance().getAllUser();
         Assert.assertEquals(returnedUserEntities, userEntities);
+        UserDB.getInstance().deleteUser(firstUserEntity);
+        UserDB.getInstance().deleteUser(secondUserEntity);
     }
     
 }

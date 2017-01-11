@@ -2,14 +2,15 @@ package xyz.codingmentor.database;
 
 import java.util.List;
 import javax.interceptor.ExcludeClassInterceptors;
+import javax.interceptor.Interceptors;
 import xyz.codingmentor.entity.UserEntity;
-import xyz.codingmentor.interceptor.BeanValidation;
+import xyz.codingmentor.interceptor.ValidatorInterceptor;
 
 /**
  *
  * @author Ádám
  */
-@BeanValidation
+@Interceptors(ValidatorInterceptor.class)
 public class UserDBService {
     
     public UserDBService() {
@@ -39,9 +40,5 @@ public class UserDBService {
     
     public List<UserEntity> getAllUser() {
         return UserDB.getInstance().getAllUser();
-    }
-    
-    public void clearUserDB() {
-        UserDB.getInstance().clearUserDB();
     }
 }

@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
-import javax.interceptor.ExcludeClassInterceptors;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;
@@ -21,7 +20,6 @@ import xyz.codingmentor.exception.ValidationException;
  * @author Ádám
  */
 @Interceptor
-@BeanValidation
 public class ValidatorInterceptor {
 
     @Inject
@@ -30,9 +28,7 @@ public class ValidatorInterceptor {
 
     @AroundInvoke
     public Object checkMethodParameters(InvocationContext ic) throws Exception {
-        if (!ic.getMethod().isAnnotationPresent(ExcludeClassInterceptors.class)) {
-            validateParameters(ic.getParameters());
-        }
+        validateParameters(ic.getParameters());
         Logger.getLogger(ValidatorInterceptor.class.getName())
                 .log(Level.INFO, "Checking method: {0}", ic.getMethod().getName());
         return ic.proceed();

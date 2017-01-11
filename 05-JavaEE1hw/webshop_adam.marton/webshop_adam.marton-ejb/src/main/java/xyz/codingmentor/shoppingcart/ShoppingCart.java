@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import xyz.codingmentor.database.DeviceDB;
+import xyz.codingmentor.database.DeviceDBService;
 import xyz.codingmentor.entity.DeviceEntity;
 import xyz.codingmentor.exception.NotEnoughDeviceOnStockException;
 
@@ -15,14 +15,15 @@ import xyz.codingmentor.exception.NotEnoughDeviceOnStockException;
 public class ShoppingCart {
     private static final Logger LOGGER = Logger.getLogger(ShoppingCart.class.getName());
     private final Map<DeviceEntity, Integer> devicesInCart = new HashMap<>();
-    private Integer value;
+    private final DeviceDBService deviceDBService = new DeviceDBService();
+    private Integer value = 0;
     
     public void addDeviceToCart(String id, Integer quantity) {
-        DeviceEntity device = DeviceDB.getInstance().getDevice(id);
+        DeviceEntity device = deviceDBService.getDevice(id);
         if(quantity <= device.getCount()) {
             devicesInCart.put(device, quantity);
             device.setCount(device.getCount() - quantity);
-            DeviceDB.getInstance().editDevice(device);
+            deviceDBService.editDevice(device);
             value += quantity * device.getPrice();
         }
         throw new NotEnoughDeviceOnStockException("Not enough " 
@@ -30,24 +31,24 @@ public class ShoppingCart {
     }
     
     public void deleteDeviceFromCart(String id, Integer quantity) {
-        DeviceEntity device = DeviceDB.getInstance().getDevice(id);
+        DeviceEntity device = deviceDBService.getDevice(id);
         if(quantity < devicesInCart.get(device)) {
             devicesInCart.replace(device, devicesInCart.get(device) - quantity);
             value -= quantity * device.getPrice();
             device.setCount(device.getCount() + quantity);
-            DeviceDB.getInstance().editDevice(device);
+            deviceDBService.editDevice(device);
         }
         value -= devicesInCart.get(device) * device.getPrice();
         device.setCount(device.getCount() + quantity);
-        DeviceDB.getInstance().editDevice(device);
+        deviceDBService.editDevice(device);
         devicesInCart.remove(device);
     }
     
     public void deleteAllDevicesFromCart() {
         for(Map.Entry<DeviceEntity, Integer> d : devicesInCart.entrySet()) {
-            DeviceEntity device = DeviceDB.getInstance().getDevice(d.getKey().getId());
+            DeviceEntity device = deviceDBService.getDevice(d.getKey().getId());
             device.setCount(device.getCount() + d.getValue());
-            DeviceDB.getInstance().editDevice(device);
+            deviceDBService.editDevice(device);
         }
         devicesInCart.clear();
         value = 0;
