@@ -25,15 +25,24 @@ import xyz.codingmentor.rest.exception.IdNotMatchException;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserRestService {
     private static final Map<String, UserEntity> USERS = new HashMap<>();
-      
-    // http://localhost:8080/rest-adam.marton-web/rest/users
+
+    /**
+     * http://localhost:8080/rest-adam.marton-web/rest/users
+     * @return ArrayList
+     */
     @GET
     public List<UserEntity> getAllUsers() {
         return new ArrayList(USERS.values());
     }
     
-    // http://localhost:8080/rest-adam.marton-web/rest/users
-    // <jsonforRESTapp.json> JSON file for POST committed too (with email, password, address fields)
+    // 
+
+    /**
+     * http://localhost:8080/rest-adam.marton-web/rest/users 
+     * <jsonforRESTapp.json> JSON file for POST committed too (with email, password, address fields)
+     * @param user
+     * @return UserEntity
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public UserEntity addUser(UserEntity user) {
@@ -42,17 +51,28 @@ public class UserRestService {
         return user;
     }
     
-    // http://localhost:8080/rest-adam.marton-web/rest/users/{id}
-    // {id} means the generated random UUID
+
+    /**
+     * http://localhost:8080/rest-adam.marton-web/rest/users/{id}
+     * {id} means the generated random UUID
+     * @param id
+     * @return UserEntity
+     */
     @GET
     @Path("/{id}")
     public UserEntity getUserById(@PathParam("id") String id) {
         return USERS.get(id);
     }
-    
-    // http://localhost:8080/rest-adam.marton-web/rest/users/{id}
-    // {id} means the generated random UUID
-    // the previous json file can be used here, but the url's {id} must be added in the json too
+
+    /**
+     * http://localhost:8080/rest-adam.marton-web/rest/users/{id}
+     * {id} means the generated random UUID.
+     * The previous json file can be used here, but the url's {id} must be added in the json too.
+     * @param id
+     * @param user
+     * @return UserEntity
+     * @throws IdNotMatchException
+     */
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -63,9 +83,12 @@ public class UserRestService {
         }
         throw new IdNotMatchException("User IDs not matching");
     }
-    
-    // http://localhost:8080/rest-adam.marton-web/rest/users/{id}
-    // {id} means the generated random UUID
+
+    /**
+     * http://localhost:8080/rest-adam.marton-web/rest/users/{id}
+     * {id} means the generated random UUID
+     * @param id
+     */
     @DELETE
     @Path("/{id}")
     public void deleteUser(@PathParam("id") String id) {
