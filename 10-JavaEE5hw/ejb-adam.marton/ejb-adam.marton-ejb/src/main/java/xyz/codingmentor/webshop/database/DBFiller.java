@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.DependsOn;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -20,7 +19,6 @@ import xyz.codingmentor.webshop.entity.UserEntity;
  * @author Ádám
  */
 @Startup
-@DependsOn({"DeviceDB", "UserDB"})
 @Singleton
 public class DBFiller {
     private static final Logger LOGGER = Logger.getLogger(DBFiller.class.getName());
