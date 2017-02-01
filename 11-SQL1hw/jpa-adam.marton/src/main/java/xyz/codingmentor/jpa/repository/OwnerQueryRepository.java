@@ -1,4 +1,4 @@
-package xyz.codingmentor.jpa.service;
+package xyz.codingmentor.jpa.repository;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -10,7 +10,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import xyz.codingmentor.jpa.api.OwnerRepository;
+import xyz.codingmentor.jpa.api.OwnerQueryRepositoryInterface;
 import xyz.codingmentor.jpa.api.RepositoryException;
 import xyz.codingmentor.jpa.entity.Owner;
 
@@ -19,33 +19,13 @@ import xyz.codingmentor.jpa.entity.Owner;
  * @author Ádám
  */
 @Stateless
-public class JPAOwnerRepository implements OwnerRepository {
+public class OwnerQueryRepository implements OwnerQueryRepositoryInterface {
     private final EntityManagerFactory factory;
     private final EntityManager entityManager;
     
-    public JPAOwnerRepository() {
+    public OwnerQueryRepository() {
         factory = Persistence.createEntityManagerFactory("carParkPU");
         entityManager = factory.createEntityManager();
-    }
-    
-    @Override
-    public Owner createOwner(String id) throws RepositoryException {
-        Owner owner = new Owner();
-        owner.setId(id);
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
-        entityManager.persist(owner);
-        tx.commit();
-        return owner;
-    }
-
-    @Override
-    public Owner findOwner(String id) throws RepositoryException {
-        Owner owner = entityManager.find(Owner.class, id);
-        if(null != owner) {
-            return owner;
-        }
-        return null;
     }
     
     @Override
@@ -69,14 +49,6 @@ public class JPAOwnerRepository implements OwnerRepository {
         }
         return owners;
     }
-
-    @Override
-    public void updateOwner(Owner owner) throws RepositoryException {
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
-        entityManager.merge(owner);
-        tx.commit();
-    }
     
     @Override
     public void updatePhoneWhereIsNull(String number) throws RepositoryException {
@@ -86,17 +58,6 @@ public class JPAOwnerRepository implements OwnerRepository {
         EntityTransaction tx = entityManager.getTransaction();
         tx.begin();
         query.executeUpdate();
-        tx.commit();
-    }
-
-    @Override
-    public void removeOwner(String id) throws RepositoryException {
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
-        Owner owner = entityManager.find(Owner.class, id);
-        if(null != owner) {
-            entityManager.remove(owner);
-        }
         tx.commit();
     }
     

@@ -10,7 +10,8 @@ import javax.inject.Inject;
 import xyz.codingmentor.jpa.api.RepositoryException;
 import xyz.codingmentor.jpa.entity.CarPark;
 import xyz.codingmentor.jpa.entity.Owner;
-import xyz.codingmentor.jpa.service.OwnerService;
+import xyz.codingmentor.jpa.service.OwnerCRUDService;
+import xyz.codingmentor.jpa.service.OwnerQueryService;
 
 /**
  *
@@ -19,7 +20,8 @@ import xyz.codingmentor.jpa.service.OwnerService;
 public class Application {
     private static final Logger LOGGER = Logger.getLogger(Application.class.getName());
     @Inject
-    private OwnerService ownerService;
+    private OwnerCRUDService crudService;
+    @Inject OwnerQueryService queryService;
     
     public Application() {
         //default constructor
@@ -33,32 +35,32 @@ public class Application {
         calendar = new GregorianCalendar();
         calendar.add(Calendar.YEAR, -20);
         buildOwner("112233ZZ", "Jack Doe", calendar.getTime(), null, null);
-        printOwners(ownerService.getOwnersByName("Doe"));
-        List<String> ownersNameOrdered = ownerService.getOwnersNameOrderedAboveAge(18);
+        printOwners(queryService.getOwnersByName("Doe"));
+        List<String> ownersNameOrdered = queryService.getOwnersNameOrderedAboveAge(18);
         LOGGER.log(Level.INFO, "Owners ordered by name:");
         for(String s : ownersNameOrdered) {
             LOGGER.log(Level.INFO, s);
         }
-        ownerService.updatePhoneWhereIsNull("+361020304");
+        queryService.updatePhoneWhereIsNull("+361020304");
         LOGGER.log(Level.INFO, "NULL phone number is updated!");
-        printOwners(ownerService.getOwnersByName("Doe"));
-        ownerService.removeOwnersUnder18();
+        printOwners(queryService.getOwnersByName("Doe"));
+        queryService.removeOwnersUnder18();
         LOGGER.log(Level.INFO, "Owners under age 18 has been deleted!");
-        printOwners(ownerService.getOwnersByName("Doe"));
-        ownerService.removeOwnersByName("Doe");
+        printOwners(queryService.getOwnersByName("Doe"));
+        queryService.removeOwnersByName("Doe");
         LOGGER.log(Level.INFO, "Owners by name 'Doe' has been deleted!");
-        if(ownerService.getOwnersByName("Doe").isEmpty()) {
+        if(queryService.getOwnersByName("Doe").isEmpty()) {
             LOGGER.log(Level.INFO, "There is no owner named 'Doe' is in the database.");
         }
     }
     
     private void buildOwner(String id, String name, Date date, String phone, CarPark carPark) throws RepositoryException {
-        Owner owner = ownerService.createOwner(id);
+        Owner owner = crudService.createOwner(id);
         owner.setName(name);
         owner.setDateOfBirth(date);
         owner.setPhone(phone);
         owner.setCarPark(carPark);
-        ownerService.updateOwner(owner);
+        crudService.updateOwner(owner);
     }
     
     private static void printOwners(List<Owner> owners) throws RepositoryException {
