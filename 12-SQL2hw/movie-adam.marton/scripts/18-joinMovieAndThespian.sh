@@ -1,0 +1,1 @@
+curl --verbose --write-out "\n" --request POST --cookie-jar cart-cookies.txt --cookie cart-cookies.txt "http://localhost:8080/movie-adam.marton-web/rest/join/thespian?movieId=1&thespianId=9"

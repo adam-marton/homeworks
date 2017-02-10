@@ -1,0 +1,59 @@
+REST End Pointok: (POST és PUT end pointokhoz mellékelve json fájl, a bennük szereplõ id-t módosítani kell az aktuálisra)
+
+Category:
+-POST
+http://localhost:8080/movie-adam.marton-web/rest/category
+-GET
+http://localhost:8080/movie-adam.marton-web/rest/category/{id}
+-PUT
+http://localhost:8080/movie-adam.marton-web/rest/category/{id}
+-DELETE
+http://localhost:8080/movie-adam.marton-web/rest/category/{id}
+
+Movie:
+-POST
+http://localhost:8080/movie-adam.marton-web/rest/movie
+-GET
+http://localhost:8080/movie-adam.marton-web/rest/movie/{id}
+-PUT
+http://localhost:8080/movie-adam.marton-web/rest/movie/{id}
+-DELETE
+http://localhost:8080/movie-adam.marton-web/rest/movie/{id}
+
+Thespian:
+-POST
+http://localhost:8080/movie-adam.marton-web/rest/thespian
+-GET
+http://localhost:8080/movie-adam.marton-web/rest/thespian/{id}
+-PUT
+http://localhost:8080/movie-adam.marton-web/rest/thespian/{id}
+-DELETE
+http://localhost:8080/movie-adam.marton-web/rest/thespian/{id}
+
+Trailer:
+-POST
+http://localhost:8080/movie-adam.marton-web/rest/trailer
+-GET
+http://localhost:8080/movie-adam.marton-web/rest/trailer/{id}
+-PUT
+http://localhost:8080/movie-adam.marton-web/rest/trailer/{id}
+-DELETE
+http://localhost:8080/movie-adam.marton-web/rest/trailer/{id}
+
+SearchResource (a további keresésekhez):
+-GET (filmek cím és/vagy kategória szerint)
+http://localhost:8080/movie-adam.marton-web/rest/search/movies?title={title}&categoryId={id}
+-GET (szereplõk név és/vagy film szerint)
+http://localhost:8080/movie-adam.marton-web/rest/search/thespians?firstName={firstName}&lastName={lastName}&movieId={id}
+-GET (szereplõk nemzetiség szerint)
+http://localhost:8080/movie-adam.marton-web/rest/search/thespians_nat?nationality={nationality}
+-GET (elõzetesek film szerint)
+http://localhost:8080/movie-adam.marton-web/rest/search/trailers?movieId={id}
+
+JoinResource (az entitások összerendeléséhez):
+-POST (film és szereplõ)
+http://localhost:8080/movie-adam.marton-web/rest/join/thespian?movieId={id}&thespianId={id}
+-POST (film és elõzetes)
+http://localhost:8080/movie-adam.marton-web/rest/join/trailer?movieId={id}&trailerId={id}
+-POST (film és kategória)
+http://localhost:8080/movie-adam.marton-web/rest/join/category?movieId={id}&categoryId={id}
